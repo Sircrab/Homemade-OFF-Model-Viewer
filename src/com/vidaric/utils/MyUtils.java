@@ -1,13 +1,34 @@
 package com.vidaric.utils;
 
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
+import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
+import static org.lwjgl.opengl.GL20.glAttachShader;
+import static org.lwjgl.opengl.GL20.glCompileShader;
+import static org.lwjgl.opengl.GL20.glCreateProgram;
+import static org.lwjgl.opengl.GL20.glCreateShader;
+import static org.lwjgl.opengl.GL20.glDeleteShader;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glLinkProgram;
+import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL20.glUniform1f;
+import static org.lwjgl.opengl.GL20.glUniform3f;
+import static org.lwjgl.opengl.GL20.glUniform3fv;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -222,5 +243,49 @@ public class MyUtils {
 		}
 		if(result.length()<2){return "";}
 		return result.substring(0, result.length()-2);
+	}
+	
+	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
+		ByteBuffer buffer;
+		File file = new File(resource);
+		if ( file.isFile() ) {
+			@SuppressWarnings("resource")
+			FileChannel fc = new FileInputStream(file).getChannel();
+			buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
+			while ( fc.read(buffer) != -1 ) ;
+			fc.close();
+		} else {
+			buffer = BufferUtils.createByteBuffer(bufferSize);
+
+			InputStream source = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+			if ( source == null )
+				throw new FileNotFoundException(resource);
+
+			try {
+				ReadableByteChannel rbc = Channels.newChannel(source);
+				try {
+					while ( true ) {
+						int bytes = rbc.read(buffer);
+						if ( bytes == -1 )
+							break;
+						if ( buffer.remaining() == 0 )
+							buffer = resizeBuffer(buffer, buffer.capacity() * 2);
+					}
+				} finally {
+					rbc.close();
+				}
+			} finally {
+				source.close();
+			}
+		}
+
+		buffer.flip();
+		return buffer;
+	}
+	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
+		ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
+		buffer.flip();
+		newBuffer.put(buffer);
+		return newBuffer;
 	}
 }

@@ -2,8 +2,6 @@ package com.vidaric.main;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import java.util.ArrayList;
@@ -81,6 +79,9 @@ public class MainClass{
 		int cubeFragmentShader = MyUtils.createFragmentShaderFrom("normalmapping.fsh");
 		int cubeShaderProgram = MyUtils.createProgramFromShaders(new int[]{cubeVertexShader,cubeFragmentShader});
 		
+		Image image = new Image("textures/uvtemplate.bmp");
+		
+		
 		fileManager.loadModelToScreen("offmodels/m2.off");
 		
 		Matrix4f modelMatrix = new Matrix4f().identity();
@@ -112,6 +113,8 @@ public class MainClass{
 			//////
 			 */
 			
+			glBindTexture(GL_TEXTURE_2D, image.getTextureId());
+			
 			DrawingUtils.drawCube(cube, modelMatrix, viewMatrix, perspectiveMatrix, cubeShaderProgram);
 			DrawingUtils.drawPhongLights(phongLights, modelMatrix, perspectiveMatrix, viewMatrix, lightShaderProgram);
 			
@@ -126,6 +129,7 @@ public class MainClass{
 		glEnable(GL_ALPHA_TEST);
 		glEnable(GL_DEPTH_TEST);
 		glClearColor(0f, 0f, 0f, 1f);
+		glEnable(GL_TEXTURE_2D);
 	}
 
 	private void gameSetup(){
