@@ -62,6 +62,9 @@ public class MainClass{
 													new PhongLight(new Vector3f(3f,2f,-1f), new Vector3f(0f,0f,1f), 1f, 1f,0.09f,0.032f),
 													new PhongLight(new Vector3f(3f,-2f,1f), new Vector3f(1f,1f,0f), 1f, 1f,0.09f,0.032f),
 													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,1f), 1f, 1f,0.09f,0.032f)};
+		CubeModel cube =  new CubeModel(new Vector3f(0f,0f,0f));
+
+		
 		for(Movable light : phongLights){
 			movablesList.add(light);
 		}
@@ -73,6 +76,10 @@ public class MainClass{
 		int lightVertexShader = MyUtils.createVertexShaderFrom("lightVertexShader.vsh");
 		int lightFragmentShader = MyUtils.createFragmentShaderFrom("lightFragmentShader.fsh");
 		int lightShaderProgram = MyUtils.createProgramFromShaders(new int[]{lightVertexShader,lightFragmentShader});
+		
+		int cubeVertexShader = MyUtils.createVertexShaderFrom("normalmapping.vsh");
+		int cubeFragmentShader = MyUtils.createFragmentShaderFrom("normalmapping.fsh");
+		int cubeShaderProgram = MyUtils.createProgramFromShaders(new int[]{cubeVertexShader,cubeFragmentShader});
 		
 		fileManager.loadModelToScreen("offmodels/m2.off");
 		
@@ -88,6 +95,7 @@ public class MainClass{
 			normalMatrix.identity();MyUtils.setNormalMatrix(normalMatrix, modelMatrix);
 			viewMatrix.identity();MyUtils.setViewMatrix4f(viewMatrix, camera.getPosition(), camera.getTheta(), camera.getPhi(), upVector, xAxis);
 			
+			/*
 			//OFF//
 			state.displayShader();
 			modelMatrix.identity();
@@ -102,11 +110,11 @@ public class MainClass{
 			glDrawArrays(GL_TRIANGLES,0,OFFParser.getLastGeneratedBufferSize());
 			glBindVertexArray(0);
 			//////
+			 */
 			
-			//LUZ
-			glUseProgram(lightShaderProgram);
-			DrawingUtils.drawPhongLights(phongLights, modelMatrix, lightShaderProgram);
-			MatrixUtils.sendMVPtoShader(modelMatrix, viewMatrix, perspectiveMatrix, lightShaderProgram);
+			DrawingUtils.drawCube(cube, modelMatrix, viewMatrix, perspectiveMatrix, cubeShaderProgram);
+			DrawingUtils.drawPhongLights(phongLights, modelMatrix, perspectiveMatrix, viewMatrix, lightShaderProgram);
+			
 			//////
 			glfwSwapInterval(1);
 			glfwSwapBuffers(window);
