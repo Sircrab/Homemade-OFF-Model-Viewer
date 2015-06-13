@@ -2,6 +2,8 @@ package com.vidaric.main;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import java.util.ArrayList;
@@ -42,6 +44,10 @@ public class MainClass{
 	public static void main(String[] args) {
 		new MainClass().run();
 	}
+	private static Matrix4f modelMatrix;
+	private static Matrix4f normalMatrix;
+	private static Matrix4f perspectiveMatrix;
+	private static Matrix4f viewMatrix;
 
 	public void run(){
 		movablesList = new ArrayList<Movable>();
@@ -60,7 +66,7 @@ public class MainClass{
 													new PhongLight(new Vector3f(3f,2f,-1f), new Vector3f(0f,0f,1f), 1f, 1f,0.09f,0.032f),
 													new PhongLight(new Vector3f(3f,-2f,1f), new Vector3f(1f,1f,0f), 1f, 1f,0.09f,0.032f),
 													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,1f), 1f, 1f,0.09f,0.032f)};
-		CubeModel cube =  new CubeModel(new Vector3f(0f,0f,0f));
+		
 
 		
 		for(Movable light : phongLights){
@@ -79,15 +85,17 @@ public class MainClass{
 		int cubeFragmentShader = MyUtils.createFragmentShaderFrom("normalmapping.fsh");
 		int cubeShaderProgram = MyUtils.createProgramFromShaders(new int[]{cubeVertexShader,cubeFragmentShader});
 		
-		Image image = new Image("textures/uvtemplate.bmp");
+		Image image = new Image("textures/brickwall.jpg");
+		Image normalMap = new Image("textures/brickwall_normal.jpg");
 		
+		CubeModel cube =  new CubeModel(new Vector3f(0f,0f,0f), image, normalMap, cubeShaderProgram);
 		
 		fileManager.loadModelToScreen("offmodels/m2.off");
 		
-		Matrix4f modelMatrix = new Matrix4f().identity();
-		Matrix4f normalMatrix = new Matrix4f(); MyUtils.setNormalMatrix(normalMatrix, modelMatrix);
-		Matrix4f perspectiveMatrix = new Matrix4f().perspective(45f, (float)WIDTH/(float)HEIGHT, 0.01f, 2000f);
-		Matrix4f viewMatrix = new Matrix4f().identity();MyUtils.setViewMatrix4f(viewMatrix, camera.getPosition(), camera.getTheta(), camera.getPhi(), upVector, xAxis);
+		modelMatrix = new Matrix4f().identity();
+		normalMatrix = new Matrix4f(); MyUtils.setNormalMatrix(normalMatrix, modelMatrix);
+		perspectiveMatrix = new Matrix4f().perspective(45f, (float)WIDTH/(float)HEIGHT, 0.01f, 2000f);
+		viewMatrix = new Matrix4f().identity();MyUtils.setViewMatrix4f(viewMatrix, camera.getPosition(), camera.getTheta(), camera.getPhi(), upVector, xAxis);
 
 		while(glfwWindowShouldClose(window) == GL_FALSE){
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -112,10 +120,9 @@ public class MainClass{
 			glBindVertexArray(0);
 			//////
 			 */
-			
-			glBindTexture(GL_TEXTURE_2D, image.getTextureId());
-			
-			DrawingUtils.drawCube(cube, modelMatrix, viewMatrix, perspectiveMatrix, cubeShaderProgram);
+		
+		
+			cube.draw();
 			DrawingUtils.drawPhongLights(phongLights, modelMatrix, perspectiveMatrix, viewMatrix, lightShaderProgram);
 			
 			//////
@@ -208,4 +215,8 @@ public class MainClass{
 	public static float getScaleFactor(){return scaleFactor;}
 	public static void setScaleFactor(float newfactor){scaleFactor = newfactor;}
 	public static float getScaleSpeed(){return scaleSpeed;}
+	public static Matrix4f getModel(){return modelMatrix;}
+	public static Matrix4f getView(){return viewMatrix;}
+	public static Matrix4f getProjection(){return perspectiveMatrix;}
+	public static Matrix4f getNormal(){return normalMatrix;}
 }

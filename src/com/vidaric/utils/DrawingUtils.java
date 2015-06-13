@@ -1,7 +1,12 @@
 package com.vidaric.utils;
 
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL20.*;
 
@@ -9,6 +14,7 @@ import com.joml.Matrix4f;
 import com.joml.Vector3f;
 import com.vidaric.light.PhongLight;
 import com.vidaric.main.CubeModel;
+import com.vidaric.main.Image;
 import com.vidaric.main.MainClass;
 
 public class DrawingUtils {
@@ -36,8 +42,14 @@ public class DrawingUtils {
 		}
 	}
 	
-	public static void drawCube(CubeModel cube, Matrix4f modelMatrix, Matrix4f viewMatrix, Matrix4f projectionMatrix, int shaderProgram){
+	public static void drawCube(CubeModel cube, Image image, Image normalMap, Matrix4f modelMatrix, Matrix4f viewMatrix, Matrix4f projectionMatrix, int shaderProgram){
 		glUseProgram(shaderProgram);
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(glGetUniformLocation(shaderProgram, "mainTexture"), 0);
+		glBindTexture(GL_TEXTURE_2D,image.getTextureId());
+		glActiveTexture(GL_TEXTURE1);
+		glUniform1i(glGetUniformLocation(shaderProgram, "normalMapTexture"), 1);
+		glBindTexture(GL_TEXTURE_2D,normalMap.getTextureId());
 		modelMatrix.identity().scale(MainClass.getScaleFactor());
 		MatrixUtils.sendMVPtoShader(modelMatrix, viewMatrix, projectionMatrix, shaderProgram);
 		glBindVertexArray(cube.getVaoId());
