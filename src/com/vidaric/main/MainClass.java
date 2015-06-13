@@ -6,7 +6,6 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-import java.nio.file.attribute.AclEntry.Builder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,6 +13,15 @@ import org.lwjgl.opengl.GLContext;
 
 import com.joml.Matrix4f;
 import com.joml.Vector3f;
+import com.vidaric.light.AmbientLight;
+import com.vidaric.light.PhongLight;
+import com.vidaric.shaders.CelShader;
+import com.vidaric.shaders.IShaderState;
+import com.vidaric.shaders.PhongShader;
+import com.vidaric.utils.DrawingUtils;
+import com.vidaric.utils.MatrixUtils;
+import com.vidaric.utils.MyUtils;
+import com.vidaric.vaos.OFFVao;
 
 public class MainClass{
 	private static FPCamera camera;
@@ -26,8 +34,8 @@ public class MainClass{
 	private static IShaderState state;
 	private static HashMap<String, IShaderState> stateMap;
 	
-	public static final int WIDTH=1920;
-	public static final int HEIGHT=1080;
+	public static final int WIDTH=800;
+	public static final int HEIGHT=640;
 	public static OFFVao offvao;
 	public static Vector3f upVector;
 	public static Vector3f xAxis;

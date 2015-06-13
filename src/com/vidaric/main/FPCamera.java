@@ -3,6 +3,7 @@ package com.vidaric.main;
 import static org.lwjgl.glfw.GLFW.*;
 
 import com.joml.Vector3f;
+import com.vidaric.utils.MyUtils;
 
 public class FPCamera extends Camera {
 	private float speed = 0.25f;

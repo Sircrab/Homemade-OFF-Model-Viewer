@@ -4,6 +4,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.glfw.*;
 
+import com.vidaric.utils.MyUtils;
+
 public class CallBackContainer {
 	public boolean[] keys;
 	public GLFWKeyCallback keyCallback;
