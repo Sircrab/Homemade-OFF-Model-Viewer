@@ -14,6 +14,7 @@ out vec4 color;
 
 in vec2 TexCoord;
 in vec3 fragPos;
+in mat3 TBN;
 #define NUM_LIGHTS 6
 
 uniform PhongLight phongLights[NUM_LIGHTS];
@@ -29,6 +30,7 @@ void main()
 	vec3 norm = texture(normalMapTexture, TexCoord).rgb;
 	vec3 myColor = texture(mainTexture, TexCoord).rgb;
 	norm = normalize(norm*2.0f - 1.0f);
+	norm = normalize(TBN*norm);
 	vec3 result = vec3(0.0f,0.0f,0.0f);
 	result = (result + ambientLight);
 	for(int i=0; i<NUM_LIGHTS; i++){

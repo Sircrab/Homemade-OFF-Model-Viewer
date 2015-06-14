@@ -33,8 +33,8 @@ public class MainClass{
 	private static IShaderState state;
 	private static HashMap<String, IShaderState> stateMap;
 	
-	public static final int WIDTH=800;
-	public static final int HEIGHT=640;
+	public static final int WIDTH=1920;
+	public static final int HEIGHT=1080;
 	public static OFFVao offvao;
 	public static Vector3f upVector;
 	public static Vector3f xAxis;
@@ -63,7 +63,7 @@ public class MainClass{
 	private void loop(){
 		setAmbientLight(new AmbientLight(new Vector3f(0f,0f,0f), new Vector3f(1f,1f,1f), 0.2f));
 		phongLights = new PhongLight[]{//new PhongLight(new Vector3f(15f,15f,15f), new Vector3f(1f,1f,1f), 0.75f, 0.75f,0f,0f),
-													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,0f), 1f, 1f,0.09f,0.032f)};
+													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(1f,1f,1f), 1f, 1f,0.09f,0.032f)};
 													//new PhongLight(new Vector3f(3f,2f,-1f), new Vector3f(0f,0f,1f), 1f, 1f,0.09f,0.032f),
 													//new PhongLight(new Vector3f(3f,-2f,1f), new Vector3f(1f,1f,0f), 1f, 1f,0.09f,0.032f),
 													//new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,1f), 1f, 1f,0.09f,0.032f)};
@@ -86,8 +86,8 @@ public class MainClass{
 		int cubeFragmentShader = MyUtils.createFragmentShaderFrom("normalmapping.fsh");
 		int cubeShaderProgram = MyUtils.createProgramFromShaders(new int[]{cubeVertexShader,cubeFragmentShader});
 		
-		Image image = new Image("textures/brickwall.jpg");
-		Image normalMap = new Image("textures/brickwall_normal.jpg");
+		Image image = new Image("textures/196.jpg");
+		Image normalMap = new Image("textures/196_norm.jpg");
 		
 		CubeModel cube =  new CubeModel(new Vector3f(0f,0f,0f), image, normalMap, cubeShaderProgram);
 		

@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.joml.Vector2f;
@@ -22,6 +23,7 @@ public class CubeModel extends GameObject implements Drawable {
 	private Image normalMap;
 	private int shaderProgram;
 	private ArrayList<MyVertex> normalMappingVertices;
+	private HashMap<MyVertex3f, MyVertex> vertexMap;
 	public CubeModel(Vector3f newPosition, Image newMainTexture, Image newNormalMap, int newShaderProgram) {
 		super(newPosition);
 		generateVertices();
@@ -33,9 +35,37 @@ public class CubeModel extends GameObject implements Drawable {
 	}
 	
 	private void generateVao(){
-		FloatBuffer floatBuffer = MyUtils.createFloatBufferFrom(_vertices);
+		FloatBuffer floatBuffer = createFloatBuffer();
 		_cubeVao = new CubeVao(floatBuffer);
 		_cubeVao.bindAndConfigure();
+	}
+	
+	private FloatBuffer createFloatBuffer(){
+		int i = 0;
+		float[] everything = new float[_vertices.length*14/5];
+		for(int face = 0; face < _vertices.length/15; face++){
+			for(MyVertex vertex : normalMappingVertices){
+				if(vertex.faces.contains(face)){
+					everything[i] = vertex.position.x; i++;
+					everything[i] = vertex.position.y; i++;
+					everything[i] = vertex.position.z; i++;
+					Vector2f uvCoords = vertex.uvCoords.get(0); vertex.uvCoords.remove(0);
+					everything[i] = uvCoords.x; i++;
+					everything[i] = uvCoords.y; i++;
+					everything[i] = vertex.currentNormal.x; i++;
+					everything[i] = vertex.currentNormal.y; i++;
+					everything[i] = vertex.currentNormal.z; i++;
+					everything[i] = vertex.currentTangent.x; i++;
+					everything[i] = vertex.currentTangent.y; i++;
+					everything[i] = vertex.currentTangent.z; i++;
+					everything[i] = vertex.currentBiTangent.x; i++;
+					everything[i] = vertex.currentBiTangent.y; i++;
+					everything[i] = vertex.currentBiTangent.z; i++;
+				}
+			}
+		}
+		FloatBuffer floatBuffer = MyUtils.createFloatBufferFrom(everything);
+		return floatBuffer;
 	}
 
 	private void generateVertices(){
@@ -113,7 +143,7 @@ public class CubeModel extends GameObject implements Drawable {
 	
 	private void generateNormalMappingVertices(){
 		normalMappingVertices = new ArrayList<MyVertex>();
-		HashMap<MyVertex3f, MyVertex> vertexMap = new HashMap<MyVertex3f, MyVertex>();
+		vertexMap = new HashMap<MyVertex3f, MyVertex>();
 		for(int face=0;face<_vertices.length/15;face++){
 			MyVertex3f position1 = new MyVertex3f(_vertices[face*15],_vertices[face*15+1],_vertices[face*15+2]);
 			MyVertex3f position2 = new MyVertex3f(_vertices[face*15+5], _vertices[face*15+6], _vertices[face*15+7]);
@@ -157,12 +187,12 @@ public class CubeModel extends GameObject implements Drawable {
 			addPositionTangentBitangentNormalFacesUV(vertexMap, position3, tangent, bitangent, normal, face, uv3);
 		}
 		for(MyVertex vertex : vertexMap.values()){
+			vertex.currentNormal.normalize();
+			vertex.currentBiTangent.normalize();
+			vertex.currentTangent.normalize();
 			normalMappingVertices.add(vertex);
+
 		}
-		for(MyVertex vertex : vertexMap.values()){
-			System.out.println(vertex.position);
-		}
-		
 	}
 	
 	private void addPositionTangentBitangentNormalFacesUV(HashMap<MyVertex3f, MyVertex> vertexMap, MyVertex3f position, MyVertex3f tangent, MyVertex3f bitangent, MyVertex3f normal, int face, Vector2f uv){

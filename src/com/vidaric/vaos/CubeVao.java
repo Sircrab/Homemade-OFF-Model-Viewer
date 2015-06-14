@@ -13,8 +13,14 @@ public class CubeVao extends AbstractVAO {
 	@Override
 	protected void setAttributes() {
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false,Float.BYTES*5, 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false,Float.BYTES*14, 0);
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1,2,GL_FLOAT,false,Float.BYTES*5,Float.BYTES*3);
+		glVertexAttribPointer(1,2,GL_FLOAT,false,Float.BYTES*14,Float.BYTES*3);
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, Float.BYTES*14, Float.BYTES*5);
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, Float.BYTES*14, Float.BYTES*8);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 3, GL_FLOAT, false, Float.BYTES*14, Float.BYTES*11);
 	}
 }
