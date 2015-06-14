@@ -19,7 +19,6 @@ import com.vidaric.shaders.CelShader;
 import com.vidaric.shaders.IShaderState;
 import com.vidaric.shaders.PhongShader;
 import com.vidaric.utils.DrawingUtils;
-import com.vidaric.utils.MatrixUtils;
 import com.vidaric.utils.MyUtils;
 import com.vidaric.vaos.OFFVao;
 
@@ -48,6 +47,8 @@ public class MainClass{
 	private static Matrix4f normalMatrix;
 	private static Matrix4f perspectiveMatrix;
 	private static Matrix4f viewMatrix;
+	private static AmbientLight ambientLight;
+	private static PhongLight[] phongLights;
 
 	public void run(){
 		movablesList = new ArrayList<Movable>();
@@ -60,22 +61,22 @@ public class MainClass{
 	}
 
 	private void loop(){
-		AmbientLight ambientLight = new AmbientLight(new Vector3f(0f,0f,0f), new Vector3f(1f,1f,1f), 0.2f);
-		PhongLight[] phongLights = new PhongLight[]{new PhongLight(new Vector3f(15f,15f,15f), new Vector3f(1f,1f,1f), 0.75f, 0.75f,0f,0f),
-													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,0f), 1f, 1f,0.09f,0.032f),
-													new PhongLight(new Vector3f(3f,2f,-1f), new Vector3f(0f,0f,1f), 1f, 1f,0.09f,0.032f),
-													new PhongLight(new Vector3f(3f,-2f,1f), new Vector3f(1f,1f,0f), 1f, 1f,0.09f,0.032f),
-													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,1f), 1f, 1f,0.09f,0.032f)};
+		setAmbientLight(new AmbientLight(new Vector3f(0f,0f,0f), new Vector3f(1f,1f,1f), 0.2f));
+		phongLights = new PhongLight[]{//new PhongLight(new Vector3f(15f,15f,15f), new Vector3f(1f,1f,1f), 0.75f, 0.75f,0f,0f),
+													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,0f), 1f, 1f,0.09f,0.032f)};
+													//new PhongLight(new Vector3f(3f,2f,-1f), new Vector3f(0f,0f,1f), 1f, 1f,0.09f,0.032f),
+													//new PhongLight(new Vector3f(3f,-2f,1f), new Vector3f(1f,1f,0f), 1f, 1f,0.09f,0.032f),
+													//new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,1f), 1f, 1f,0.09f,0.032f)};
 		
 
 		
 		for(Movable light : phongLights){
 			movablesList.add(light);
 		}
-		phongLights[1].enableMovement();
-		phongLights[2].enableMovement();
-		phongLights[3].enableMovement();
-		phongLights[4].enableMovement();
+		phongLights[0].enableMovement();
+		//phongLights[2].enableMovement();
+		//phongLights[3].enableMovement();
+		//phongLights[4].enableMovement();
 		
 		int lightVertexShader = MyUtils.createVertexShaderFrom("lightVertexShader.vsh");
 		int lightFragmentShader = MyUtils.createFragmentShaderFrom("lightFragmentShader.fsh");
@@ -219,4 +220,17 @@ public class MainClass{
 	public static Matrix4f getView(){return viewMatrix;}
 	public static Matrix4f getProjection(){return perspectiveMatrix;}
 	public static Matrix4f getNormal(){return normalMatrix;}
+	public static Camera getCamera(){return camera;}
+
+	public static AmbientLight getAmbientLight() {
+		return ambientLight;
+	}
+
+	public static void setAmbientLight(AmbientLight ambientLight) {
+		MainClass.ambientLight = ambientLight;
+	}
+	
+	public static PhongLight[] getPhongLights() {
+		return phongLights;
+	}
 }
