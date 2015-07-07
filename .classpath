@@ -2,13 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="C:/Users/stefa_000/lwjgl/jar/lwjgl.jar" sourcepath="C:/Users/stefa_000/lwjgl/src">
+	<classpathentry kind="lib" path="/home/stefano/.libs/joml-1.2.8-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/stefano/.libs/lwjgl/jar/lwjgl.jar" sourcepath="/home/stefano/.libs/lwjgl/src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Users/stefa_000/lwjgl/doc/javadoc/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/stefa_000/lwjgl/native"/>
+			<attribute name="javadoc_location" value="jar:file:/home/stefano/.libs/lwjgl/doc/javadoc.zip!/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/stefano/.libs/lwjgl/native"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/stefa_000/lwjgl/jar/lwjgl_util-2.9.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/stefa_000/JOML-master/JOML-master/target/joml-1.1.4-SNAPSHOT.jar" sourcepath="C:/Users/stefa_000/JOML-master/JOML-master/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
