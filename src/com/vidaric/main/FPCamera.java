@@ -1,12 +1,18 @@
 package com.vidaric.main;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
 
-import com.joml.Vector3f;
+import org.joml.Vector3f;
+
 import com.vidaric.utils.MyUtils;
 
 public class FPCamera extends Camera {
-	private float speed = 0.25f;
+	private float speed = 0.015f;
 	private float mouseSensitivity = 0.1f;
 	private Vector3f _up = new Vector3f(0f,1f,0f);
 	private Vector3f _right = new Vector3f();

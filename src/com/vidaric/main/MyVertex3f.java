@@ -1,6 +1,6 @@
 package com.vidaric.main;
 
-import com.joml.Vector3f;
+import org.joml.Vector3f;
 
 public class MyVertex3f extends Vector3f {
 	public MyVertex3f(float x, float y, float z){

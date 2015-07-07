@@ -13,10 +13,10 @@ public class OFFVao extends AbstractVAO{
 	@Override
 	protected void setAttributes() {
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, Float.BYTES*10, 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, Float.SIZE/8*10, 0);
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, false, Float.BYTES*10, Float.BYTES*7);
+		glVertexAttribPointer(1, 3, GL_FLOAT, false, Float.SIZE/8*10, Float.SIZE/8*7);
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 4, GL_FLOAT, false, Float.BYTES*10, Float.BYTES*3);
+		glVertexAttribPointer(2, 4, GL_FLOAT, false, Float.SIZE/8*10, Float.SIZE/8*3);
 	}
 }

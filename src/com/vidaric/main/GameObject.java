@@ -2,7 +2,7 @@ package com.vidaric.main;
 
 import java.util.Observable;
 
-import com.joml.Vector3f;
+import org.joml.Vector3f;
 
 public class GameObject extends Observable {
 	protected Vector3f _position;

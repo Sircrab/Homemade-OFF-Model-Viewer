@@ -1,17 +1,24 @@
 package com.vidaric.main;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDrawArrays;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniform1i;
+import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
-import com.joml.Vector2f;
-import com.joml.Vector3f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+
 import com.vidaric.utils.MatrixUtils;
 import com.vidaric.utils.MyUtils;
 import com.vidaric.vaos.CubeVao;
@@ -119,6 +126,8 @@ public class CubeModel extends GameObject implements Drawable {
 
 	@Override
 	public void draw() {
+		_position.x = MainClass.getScaleFactor()*3;
+		
 		glUseProgram(shaderProgram);
 		glActiveTexture(GL_TEXTURE0);
 		glUniform1i(glGetUniformLocation(shaderProgram, "mainTexture"), 0);
@@ -134,7 +143,7 @@ public class CubeModel extends GameObject implements Drawable {
 		MyUtils.setUniformWithVector3f(MainClass.getAmbientLight().getResultingColor(), shaderProgram, "ambientLight");
 		MyUtils.sendUniformPhongLight(MainClass.getPhongLights(), shaderProgram);
 		
-		MainClass.getModel().identity().scale(MainClass.getScaleFactor());
+		MainClass.getModel().identity().translate(this._position).scale(MainClass.getScaleFactor());
 		MatrixUtils.sendMVPtoShader(MainClass.getModel(), MainClass.getView(), MainClass.getProjection(), shaderProgram);
 		glBindVertexArray(this.getVaoId());
 		glDrawArrays(GL_TRIANGLES, 0, 36);

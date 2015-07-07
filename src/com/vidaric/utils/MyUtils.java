@@ -1,7 +1,20 @@
 package com.vidaric.utils;
 
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
+import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
+import static org.lwjgl.opengl.GL20.glAttachShader;
+import static org.lwjgl.opengl.GL20.glCompileShader;
+import static org.lwjgl.opengl.GL20.glCreateProgram;
+import static org.lwjgl.opengl.GL20.glCreateShader;
+import static org.lwjgl.opengl.GL20.glDeleteShader;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glLinkProgram;
+import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL20.glUniform1f;
+import static org.lwjgl.opengl.GL20.glUniform3f;
+import static org.lwjgl.opengl.GL20.glUniform3fv;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,11 +30,11 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBShaderObjects;
 
-import com.joml.Matrix4f;
-import com.joml.Vector3f;
 import com.vidaric.light.PhongLight;
 
 
@@ -29,12 +42,12 @@ public class MyUtils {
 	/**
 	 * 
 	 * @param filename : el nombre del archivo
-	 * @return código fuente del shader
+	 * @return cï¿½digo fuente del shader
 	 * @throws Exception: error durante la lectura de filename
 	 */
 	public static String readShader(String filename) throws Exception {
 		String code = "",line;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("shaders/"+filename)));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("shaders/" + filename)));
 		while ((line = reader.readLine()) != null) {
 			code += line + "\n";
 		}
@@ -44,7 +57,7 @@ public class MyUtils {
 	
 	/**
 	 * 
-	 * @param shaderFile : el archivo que contiene el código fuente del vertex shader
+	 * @param shaderFile : el archivo que contiene el cï¿½digo fuente del vertex shader
 	 * @return el handle del vertex shader
 	 */
 	public static int createVertexShaderFrom(String shaderFile){
@@ -55,7 +68,7 @@ public class MyUtils {
 	
 	/**
 	 * 
-	 * @param shaderFile : el archivo que contiene el código fuente del fragment shader
+	 * @param shaderFile : el archivo que contiene el cï¿½digo fuente del fragment shader
 	 * @return el handle del fragment shader
 	 */
 	public static int createFragmentShaderFrom(String shaderFile){
@@ -87,8 +100,8 @@ public class MyUtils {
 	
 	/**
 	 * 
-	 * @param vertices : lista de vértices
-	 * @return un buffer que contiene los vértices en vertices
+	 * @param vertices : lista de vï¿½rtices
+	 * @return un buffer que contiene los vï¿½rtices en vertices
 	 */
 	public static FloatBuffer createFloatBufferFrom(float[] vertices){
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(vertices.length);
@@ -99,8 +112,8 @@ public class MyUtils {
 	
 	/**
 	 * 
-	 * @param vertices : lista de vértices
-	 * @return un buffer que contiene los vértices en vertices
+	 * @param vertices : lista de vï¿½rtices
+	 * @return un buffer que contiene los vï¿½rtices en vertices
 	 */
 	public static IntBuffer createIntBufferFrom(int[] vertices){
 		IntBuffer buffer = BufferUtils.createIntBuffer(vertices.length);
@@ -215,6 +228,7 @@ public class MyUtils {
 			shaderSource = readShader(shaderFile);
 		}catch(Exception e){
 			System.err.println("createShader - No se pudo parsear el shader " + shaderFile);
+			e.printStackTrace();
 			glfwTerminate();
 			System.exit(1);
 		}

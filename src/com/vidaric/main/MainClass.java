@@ -1,24 +1,55 @@
 package com.vidaric.main;
 
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED;
+import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_CORE_PROFILE;
+import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_PROFILE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetDropCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_ALPHA_TEST;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glDrawArrays;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glViewport;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GLContext;
 
-import com.joml.Matrix4f;
-import com.joml.Vector3f;
 import com.vidaric.light.AmbientLight;
 import com.vidaric.light.PhongLight;
 import com.vidaric.shaders.CelShader;
 import com.vidaric.shaders.IShaderState;
 import com.vidaric.shaders.PhongShader;
 import com.vidaric.utils.DrawingUtils;
+import com.vidaric.utils.MatrixUtils;
 import com.vidaric.utils.MyUtils;
 import com.vidaric.vaos.OFFVao;
 
@@ -33,8 +64,8 @@ public class MainClass{
 	private static IShaderState state;
 	private static HashMap<String, IShaderState> stateMap;
 	
-	public static final int WIDTH=1920;
-	public static final int HEIGHT=1080;
+	public static final int WIDTH=1024;
+	public static final int HEIGHT=768;
 	public static OFFVao offvao;
 	public static Vector3f upVector;
 	public static Vector3f xAxis;
@@ -62,21 +93,21 @@ public class MainClass{
 
 	private void loop(){
 		setAmbientLight(new AmbientLight(new Vector3f(0f,0f,0f), new Vector3f(1f,1f,1f), 0.2f));
-		phongLights = new PhongLight[]{//new PhongLight(new Vector3f(15f,15f,15f), new Vector3f(1f,1f,1f), 0.75f, 0.75f,0f,0f),
-													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(1f,1f,1f), 1f, 1f,0.09f,0.032f)};
-													//new PhongLight(new Vector3f(3f,2f,-1f), new Vector3f(0f,0f,1f), 1f, 1f,0.09f,0.032f),
-													//new PhongLight(new Vector3f(3f,-2f,1f), new Vector3f(1f,1f,0f), 1f, 1f,0.09f,0.032f),
-													//new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,1f), 1f, 1f,0.09f,0.032f)};
+		phongLights = new PhongLight[]{new PhongLight(new Vector3f(15f,15f,15f), new Vector3f(1f,1f,1f), 0.75f, 0.75f,0f,0f),
+													new PhongLight(new Vector3f(-3f,2f,-1f), new Vector3f(0f,1f,0f), 1f, 1f,0.09f,0.032f),
+													new PhongLight(new Vector3f(3f,2f,-1f), new Vector3f(0f,0f,1f), 1f, 1f,0.09f,0.032f),
+													new PhongLight(new Vector3f(3f,-2f,1f), new Vector3f(1f,1f,0f), 1f, 1f,0.09f,0.032f),
+													new PhongLight(new Vector3f(-3f,-2f,-1f), new Vector3f(0f,1f,1f), 1f, 1f,0.09f,0.032f)};
 		
 
 		
 		for(Movable light : phongLights){
 			movablesList.add(light);
 		}
-		phongLights[0].enableMovement();
-		//phongLights[2].enableMovement();
-		//phongLights[3].enableMovement();
-		//phongLights[4].enableMovement();
+		phongLights[1].enableMovement();
+		phongLights[2].enableMovement();
+		phongLights[3].enableMovement();
+		phongLights[4].enableMovement();
 		
 		int lightVertexShader = MyUtils.createVertexShaderFrom("lightVertexShader.vsh");
 		int lightFragmentShader = MyUtils.createFragmentShaderFrom("lightFragmentShader.fsh");
@@ -86,12 +117,12 @@ public class MainClass{
 		int cubeFragmentShader = MyUtils.createFragmentShaderFrom("normalmapping.fsh");
 		int cubeShaderProgram = MyUtils.createProgramFromShaders(new int[]{cubeVertexShader,cubeFragmentShader});
 		
-		Image image = new Image("textures/196.jpg");
-		Image normalMap = new Image("textures/196_norm.jpg");
+		Image image = new Image("textures/texture_4.png");
+		Image normalMap = new Image("textures/normal_4.png");
 		
 		CubeModel cube =  new CubeModel(new Vector3f(0f,0f,0f), image, normalMap, cubeShaderProgram);
 		
-		fileManager.loadModelToScreen("offmodels/m2.off");
+		fileManager.loadModelToScreen("offmodels/m222.off",false);
 		
 		modelMatrix = new Matrix4f().identity();
 		normalMatrix = new Matrix4f(); MyUtils.setNormalMatrix(normalMatrix, modelMatrix);
@@ -105,7 +136,7 @@ public class MainClass{
 			normalMatrix.identity();MyUtils.setNormalMatrix(normalMatrix, modelMatrix);
 			viewMatrix.identity();MyUtils.setViewMatrix4f(viewMatrix, camera.getPosition(), camera.getTheta(), camera.getPhi(), upVector, xAxis);
 			
-			/*
+			
 			//OFF//
 			state.displayShader();
 			modelMatrix.identity();
@@ -120,7 +151,7 @@ public class MainClass{
 			glDrawArrays(GL_TRIANGLES,0,OFFParser.getLastGeneratedBufferSize());
 			glBindVertexArray(0);
 			//////
-			 */
+			 
 		
 		
 			cube.draw();
@@ -165,12 +196,12 @@ public class MainClass{
 	}
 	
 	private void initShaders(){
-		int vertexShader = MyUtils.createVertexShaderFrom("vertexShader.vsh");
-		int fragmentShader = MyUtils.createFragmentShaderFrom("fragmentShader.fsh");
+		int vertexShader = MyUtils.createVertexShaderFrom("vertexshader.vsh");
+		int fragmentShader = MyUtils.createFragmentShaderFrom("fragmentshader.fsh");
 		int shaderProgram = MyUtils.createProgramFromShaders(new int[]{vertexShader,fragmentShader});
 		PhongShader phongShaderState = new PhongShader(shaderProgram);
 		
-		int celVertexShader = MyUtils.createVertexShaderFrom("vertexShader.vsh");
+		int celVertexShader = MyUtils.createVertexShaderFrom("vertexshader.vsh");
 		int celFragmentShader = MyUtils.createFragmentShaderFrom("celFragmentShader.fsh");
 		int celShaderProgram = MyUtils.createProgramFromShaders(new int[]{celVertexShader,celFragmentShader});
 		CelShader celShaderState = new CelShader(celShaderProgram);

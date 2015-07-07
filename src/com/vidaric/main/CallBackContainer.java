@@ -64,11 +64,11 @@ public class CallBackContainer {
 					Callbacks.dropCallbackNamesApply(count, names, new Callbacks.DropConsumerString() {
 						@Override
 						public void accept(int index, String name) {
-							fileManager.loadModelToScreen(MyUtils.convertToWindowsPath(name));
+							fileManager.loadModelToScreen(MyUtils.convertToWindowsPath(name), true);
 						}
 					});
 				}else{
-					System.out.println("Sólo un archivo a la vez.");
+					System.out.println("SÃ³lo un archivo a la vez.");
 				}
 			}
 		};

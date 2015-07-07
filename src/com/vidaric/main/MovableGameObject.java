@@ -1,6 +1,6 @@
 package com.vidaric.main;
 
-import com.joml.Vector3f;
+import org.joml.Vector3f;
 
 public abstract class MovableGameObject extends GameObject implements Movable {
 	public MovableGameObject(Vector3f newPosition) {

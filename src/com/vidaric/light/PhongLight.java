@@ -1,19 +1,21 @@
 package com.vidaric.light;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_1;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_2;
+
 import java.nio.FloatBuffer;
 
-import static org.lwjgl.glfw.GLFW.*;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
-import com.joml.Matrix4f;
-import com.joml.Vector3f;
-import com.joml.Vector4f;
 import com.vidaric.main.CallBackContainer;
 import com.vidaric.main.MainClass;
 import com.vidaric.utils.MyUtils;
 import com.vidaric.vaos.LightVao;
 
 public class PhongLight extends Light{
-	private final float angle_speed=1f;
+	private final float angle_speed=0.4f;
 	private DiffuseLight diffuseLight;
 	private SpecularLight specularLight;
 	private LightVao lightVao;

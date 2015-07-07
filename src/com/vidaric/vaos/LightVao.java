@@ -14,8 +14,8 @@ public class LightVao extends AbstractVAO{
 	@Override
 	protected void setAttributes() {
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, Float.BYTES*6, 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, Float.SIZE/8*6, 0);
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, Float.BYTES*6, Float.BYTES*3);
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, Float.SIZE/8*6, Float.SIZE/8*3);
 	}
 }

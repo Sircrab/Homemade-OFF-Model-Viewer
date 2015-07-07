@@ -7,11 +7,14 @@ import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniform1i;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL20.*;
 
-import com.joml.Matrix4f;
-import com.joml.Vector3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
 import com.vidaric.light.PhongLight;
 import com.vidaric.main.CubeModel;
 import com.vidaric.main.Image;

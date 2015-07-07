@@ -1,6 +1,7 @@
 package com.vidaric.light;
 
-import com.joml.Vector3f;
+import org.joml.Vector3f;
+
 import com.vidaric.main.MovableGameObject;
 
 public abstract class Light extends MovableGameObject {

@@ -8,18 +8,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
-
-import com.joml.Vector3f;
-import com.joml.Vector4f;
 
 public class OFFParser {
 	private static final Vector4f defaultColor = new Vector4f(0.75f,0.75f,0.75f,1.0f);
 	private static int lastSize = -1;
 	
-	public static FloatBuffer generateFloatBufferFrom(String fileName){
+	public static FloatBuffer generateFloatBufferFrom(String fileName, boolean callback){
 		FloatBuffer floatBuffer;
-		ArrayList<Vector4f> verticesAndColors4f = generateVector4fArray(fileName);
+		ArrayList<Vector4f> verticesAndColors4f = generateVector4fArray(fileName, callback);
 		int size = verticesAndColors4f.size();
 		floatBuffer = BufferUtils.createFloatBuffer(10*size/3);
 		int cnt=0;
@@ -43,10 +42,17 @@ public class OFFParser {
 		return floatBuffer;
 	}
 	
-	private static ArrayList<Vector4f> generateVector4fArray(String fileName) {
+	private static ArrayList<Vector4f> generateVector4fArray(String fileName, boolean callback) {
 		ArrayList<Vector4f> result = new ArrayList<Vector4f>();
 		try {
-			Scanner scanner = new Scanner(new FileInputStream(fileName));
+			Scanner scanner;
+			
+			if(!callback){
+				scanner = new Scanner(ClassLoader.getSystemClassLoader().getResourceAsStream(fileName));
+			}else{
+				scanner = new Scanner(new FileInputStream(fileName));
+			}
+			
 			if(!scanner.nextLine().equals("OFF")){
 				scanner.close();
 				throw new InvalidParameterException();
@@ -81,7 +87,7 @@ public class OFFParser {
 		} catch (FileNotFoundException e) {
 			System.err.println("generateVector4fArray - archivo no encontrado.");
 		} catch (InvalidParameterException e){
-			System.err.println("generateVector4fArray - formato inválido");
+			System.err.println("generateVector4fArray - formato invï¿½lido");
 		} catch (Exception e) {
 			System.err.println("generateVector4fArray - no pude generar nada");
 		}

@@ -2,8 +2,8 @@ package com.vidaric.main;
 
 import java.util.ArrayList;
 
-import com.joml.Vector3f;
-import com.joml.Vector2f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class MyVertex {
 	public Vector3f position;

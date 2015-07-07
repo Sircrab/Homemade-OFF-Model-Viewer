@@ -1,6 +1,6 @@
 package com.vidaric.utils;
 
-import com.joml.Matrix4f;
+import org.joml.Matrix4f;
 
 public class MatrixUtils {
 	public static void sendMVPtoShader(Matrix4f model, Matrix4f view, Matrix4f projection,int shaderProgram){
